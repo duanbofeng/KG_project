@@ -4,6 +4,23 @@ This repository implements a reproducible fact-checking engine for the Knowledge
 
 The project goal from the course slides is to return a value between `0` (false) and `1` (true) for each fact with respect to a knowledge graph. The generated result file can be uploaded to GERBIL for ROC AUC evaluation.
 
+## GERBIL Result
+
+The default offline model achieved a **ROC AUC of 0.6146 (61.46%)** on the
+`SW 2022 Test` reference dataset, exceeding the course requirement of 60%.
+
+- Experiment: [GERBIL 202607220010](https://gerbil-kbc.aksw.org/gerbil/experiment?id=202607220010)
+- Task: `Fact Checking`
+- Dataset: `SW 2022 Test`
+- ROC AUC: `0.6146`
+
+![GERBIL experiment result](docs/gerbil-result.png)
+
+## Contributors
+
+- Bofeng Duan
+- Mukund Chavda
+
 ## Project Structure
 
 ```text
@@ -12,6 +29,8 @@ The project goal from the course slides is to return a value between `0` (false)
 ├── test.txt
 ├── pyproject.toml
 ├── README.md
+├── docs/gerbil-result.png
+├── .vscode/settings.json
 ├── src/kg_factcheck/
 │   ├── cli.py
 │   ├── data.py
@@ -114,7 +133,7 @@ SPARQL responses are cached in `.kg_cache/dbpedia_exact.json`.
 1. Go to `http://gerbil-kbc.aksw.org/gerbil/config`.
 2. Choose `Fact Checking` as experiment type.
 3. Upload `result.ttl`.
-4. Choose the relevant SW reference dataset.
+4. Choose `SW 2022 Test` as the reference dataset.
 5. Submit and check the ROC AUC leaderboard result.
 
 If GERBIL reports that the annotator could not be loaded, run:

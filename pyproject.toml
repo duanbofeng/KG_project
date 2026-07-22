@@ -10,7 +10,8 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
-  { name = "KG Project Team" }
+  { name = "Bofeng Duan" },
+  { name = "Mukund Chavda" }
 ]
 dependencies = []
 
@@ -22,4 +23,3 @@ kg-factcheck = "kg_factcheck.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-

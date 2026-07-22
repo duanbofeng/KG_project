@@ -4,6 +4,8 @@ This repository implements a reproducible fact-checking engine for the Knowledge
 
 The project goal from the course slides is to return a value between `0` (false) and `1` (true) for each fact with respect to a knowledge graph. The generated result file can be uploaded to GERBIL for ROC AUC evaluation.
 
+The methodology, dataset analysis, and experimental results are documented in the [project report](PROJECT_REPORT.md).
+
 ## GERBIL Result
 
 The default offline model achieved a **ROC AUC of 0.6146 (61.46%)** on the
@@ -29,8 +31,8 @@ The default offline model achieved a **ROC AUC of 0.6146 (61.46%)** on the
 ├── test.txt
 ├── pyproject.toml
 ├── README.md
+├── PROJECT_REPORT.md
 ├── docs/gerbil-result.png
-├── .vscode/settings.json
 ├── src/kg_factcheck/
 │   ├── cli.py
 │   ├── data.py
@@ -51,11 +53,8 @@ source .venv/bin/activate
 python -m pip install -e .
 ```
 
-For tests:
-
-```bash
-python -m pip install -e ".[dev]"
-```
+The included test suite uses `unittest`, so no additional test dependency is
+required.
 
 If package installation is not possible, run the CLI directly from the source tree:
 
@@ -145,5 +144,16 @@ kg-factcheck validate --result result.ttl --test test.txt
 ## Tests
 
 ```bash
-python -m unittest
+python -m unittest discover -s tests
 ```
+
+The current test suite contains four tests covering data parsing, GERBIL output,
+model serialization and prediction, and ROC AUC calculation.
+
+## AI Assistance
+
+AI tools were used for initial repository organization, implementation
+scaffolding, the report outline, and language editing. The team reviewed and
+adapted these suggestions, ran the experiments and tests, checked the reported
+values against the generated files and GERBIL result, and takes responsibility
+for the submitted code and conclusions.

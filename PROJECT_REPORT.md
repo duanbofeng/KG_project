@@ -200,6 +200,13 @@ applied only when the same `(subject, predicate, object)` triple is present in
 the labeled training data. Test labels are never read or inferred from the
 GERBIL result.
 
+The training set contains 24 repeated triples (31 rows beyond their first
+occurrence). One repeated triple has conflicting labels; it does not occur in
+the test set and therefore does not affect exact-triple reuse at prediction
+time. The test set contains 17 repeated triples (22 additional rows). These
+rows remain separate because GERBIL expects one prediction for every fact URI,
+even when two fact URIs describe the same triple.
+
 ---
 
 ## 4. Design Goals
@@ -513,6 +520,11 @@ advantage.
 | Predicate prior | 0.5592 | 0.5488 |
 | Full hashed logistic model | **0.6253** | **0.6232** |
 
+The global-prior mean is exactly `0.5000` because each validation fold receives
+a constant score. Its pooled value is `0.4993` because the training prior is
+recomputed for each fold, so the five folds receive slightly different
+constants.
+
 The full model improves the mean AUC by 6.61 percentage points over the
 predicate-only baseline and by 12.53 points over the constant baseline. This
 shows that lexical, entity-frequency, novelty, interaction, and empirical-rate
@@ -812,8 +824,8 @@ for strict reproducibility of that mode.
 
 ## 15. Future Improvements
 
-Several extensions could increase the performance margin while preserving the
-current reliable baseline:
+The following extensions are the most practical next steps for improving the
+performance margin:
 
 1. **Batch SPARQL evidence:** replace sequential `ASK` requests with batched
    queries and commit a versioned evidence cache.
@@ -823,32 +835,22 @@ current reliable baseline:
    compatible with predicate expectations.
 4. **Pair statistics:** add smoothed `(subject, predicate)` and
    `(predicate, object)` features with careful cross-validation.
-5. **Knowledge graph embeddings:** compare lightweight embedding methods on a
-   versioned graph while retaining the offline baseline.
-6. **Nested model selection:** tune hashing size, regularization, and blending
+5. **Nested model selection:** tune hashing size, regularization, and blending
    weights inside nested cross-validation rather than against the test score.
-7. **Probability calibration:** apply Platt scaling or isotonic regression if
-   calibrated veracity values become more important than ranking.
-8. **General RDF parser:** optionally use a standards-compliant parser such as
-   RDFLib for broader Turtle syntax, while keeping the current parser for the
-   dependency-free course workflow.
-9. **Expanded tests:** add malformed-input cases, duplicate-output cases,
-   deterministic golden-file tests, and CLI integration tests.
 
 ---
 
-## 16. Team and Contribution Process
+## 16. Team Contributions
 
 The project team consists of:
 
 - **Bofeng Duan**
 - **Mukund Chavda**
 
-The repository uses Git history to preserve individual contributions. Every
-team member should review the files they submit, make any necessary corrections,
-and commit using a name and email address connected to their own GitHub account.
-This report is intended to be reviewed and submitted as a documentation
-contribution by Mukund Chavda.
+Both team members contributed to reviewing the project workflow, documentation,
+and final submission. The team reviewed and approved the methodological choices
+and implementation details, executed the experiments and tests, submitted the
+result to GERBIL, and checked the interpretation of the results.
 
 ---
 
@@ -881,13 +883,23 @@ validates the final artifact. The full model substantially outperforms global
 and predicate-only baselines. Its external ROC AUC of `0.6146` on
 `SW 2022 Test` satisfies the course requirement.
 
-The strongest practical qualities of the system are its small operational
-footprint, deterministic output, explicit validation, and clean CLI workflow.
-Its main limitation is the modest performance margin, which could be improved
-through versioned graph evidence and richer structural features. The current
-implementation nevertheless provides a sound, auditable baseline that can be
-executed on a clean machine and reproduced without network or specialized
-hardware.
+The implementation is deliberately small: it runs without specialized
+hardware, produces deterministic output, and checks the result format before
+submission. Its main limitation is the modest margin above the required AUC.
+A logical continuation would be to evaluate versioned graph evidence and richer
+structural features while keeping the present offline model as a reproducible
+baseline.
+
+---
+
+## 19. Acknowledgement of AI Assistance
+
+AI tools were used for initial repository organization, implementation
+scaffolding, the report outline, and language editing. The team reviewed and
+adapted these suggestions, selected the final method, ran the experiments and
+tests, and verified the numerical results against the generated artifacts and
+the GERBIL evaluation. AI output was not used as experimental evidence. The
+authors take responsibility for the submitted code, analysis, and conclusions.
 
 ---
 
@@ -899,4 +911,3 @@ hardware.
 3. W3C, [RDF 1.1 Concepts and Abstract Syntax](https://www.w3.org/TR/rdf11-concepts/).
 4. W3C, [XML Schema Part 2: Datatypes](https://www.w3.org/TR/xmlschema-2/).
 5. DBpedia, [SPARQL endpoint](https://dbpedia.org/sparql).
-
